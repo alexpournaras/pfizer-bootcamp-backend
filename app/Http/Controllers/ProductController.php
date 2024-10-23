@@ -14,17 +14,30 @@ class ProductController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$search = $request->input('search');
+		$itemsPerPage = $request->input('itemsPerPage', 10);
+		$page = $request->input('page', 1);
+		$searchQuery = $request->input('search', '');
+		$sortBy = $request->input('sortBy', 'id');
+		$sortOrder = $request->input('sortOrder', 'asc');
 
-		$products = Product::when($search, function ($query, $search) {
-			$query->where('name', 'like', '%' . $search . '%')
-				->orWhere('batch_number', 'like', '%' . $search . '%')
-				->orWhere('category', 'like', '%' . $search . '%')
-				->orWhere('research_status', 'like', '%' . $search . '%')
-				->orWhereJsonContains('active_ingredients', $search);
-		})->get();
+		$query = Product::query();
 
-		return response()->json($products, 200);
+		if ($searchQuery) {
+			$query->where('name', 'like', '%' . $searchQuery . '%')
+				->orWhere('batch_number', 'like', '%' . $searchQuery . '%')
+				->orWhere('category', 'like', '%' . $searchQuery . '%')
+				->orWhere('research_status', 'like', '%' . $searchQuery . '%')
+				->orWhereJsonContains('active_ingredients', $searchQuery);
+		}
+
+		$query->orderBy($sortBy, $sortOrder);
+
+		$products = $query->paginate($itemsPerPage, ['*'], 'page', $page);
+
+		return response()->json([
+			'items' => $products->items(),
+			'total' => $products->total()
+		], 200);
 	}
 
 	/**
@@ -42,10 +55,7 @@ class ProductController extends Controller
 			'expiration_date',
 		));
 
-		return response()->json([
-			'id' => $product->id,
-			'message' => 'The product has been created!
-		'], 201);
+		return response()->json(['id' => $product->id, 'message' => 'The product has been created!'], 201);
 	}
 
 	/**
