@@ -55,11 +55,7 @@ class ProductController extends Controller
 			'expiration_date',
 		));
 
-		return response()->json([
-			'id' => $product->id,
-			'message' => 'The product has been created!
-		'
-		], 201);
+		return response()->json(['id' => $product->id, 'message' => 'The product has been created!'], 201);
 	}
 
 	/**
