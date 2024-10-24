@@ -22,18 +22,6 @@ The following dependencies are required to set up the project:
 - **Docker**: A platform for developing, shipping, and running applications in containers.
 - **Docker Compose**: A tool for defining and running multi-container Docker applications.
 
-### PHP Dependencies
-
-The main PHP dependencies are specified in the `composer.json` file:
-
-- **php**: `^8.0` or higher (depending on the project requirements).
-- **fideloper/proxy**: Required for handling proxy headers in Laravel.
-- **fruitcake/laravel-cors**: For handling CORS headers.
-- **guzzlehttp/guzzle**: A PHP HTTP client for making requests.
-- **laravel/framework**: Laravel's core framework.
-- **laravel/tinker**: A REPL (Read-Eval-Print Loop) for interacting with the Laravel application.
-
-
 
 <h2>Getting Started</h2>
 
