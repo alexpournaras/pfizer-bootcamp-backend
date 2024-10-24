@@ -5,7 +5,7 @@
     <img src="https://media.licdn.com/dms/image/v2/D5612AQGfmy6NPGnt1w/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1677779939155?e=2147483647&v=beta&t=LZau1M8gEf_gGR3MK0MRlnfm5guRqsVIAnJaR6XDFHA" style="width: 200px;">
 </div>
 <h3 align="center">
-    Phizer bootcamp Project
+    Pfizer bootcamp Project
 </h3>
 
 ## Dependencies
