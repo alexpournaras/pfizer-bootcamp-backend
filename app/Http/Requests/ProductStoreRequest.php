@@ -22,7 +22,7 @@ class ProductStoreRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'name' => 'required|string',
+			'name' => 'required|string|unique:products,name',
 			'category' => 'required|string',
 			'active_ingredients' => 'required|array',
 			'batch_number' => 'required|string|unique:products,batch_number',
@@ -31,4 +31,10 @@ class ProductStoreRequest extends FormRequest
 			'expiration_date' => 'required|date|after:manufacturing_date',
 		];
 	}
+	public function messages()
+{
+    return [
+        'expiration_date.after' => 'The expiration date must be after the manufacturing date.',
+    ];
+}
 }
