@@ -18,17 +18,19 @@ class ProductFactory extends Factory
 	 */
 	public function definition(): array
 	{
+		$random_date = Carbon::parse($this->faker->date);
+
 		return [
-			'name' => ucfirst($this->faker->word) . ' ' . $this->faker->randomElement(['Medicine', 'Med', 'Drug']),
+            'name' => ucfirst($this->faker->unique()->word) . ' ' . $this->faker->randomElement(['Medicine', 'Med', 'Drug']),
 			'category' => $this->faker->randomElement(['Tablet', 'Capsule', 'Injection']),
 			'active_ingredients' => $this->faker->randomElements(
 				['Ingredient 1', 'Ingredient 2', 'Ingredient 3', 'Ingredient 4'], 
 				rand(2, 4)
 			),
-			'batch_number' => strtoupper(Str::random(10)),
+            'batch_number' => strtoupper($this->faker->unique()->bothify('???###???#')),
 			'research_status' => $this->faker->randomElement(['Under Development', 'In Clinical Trials', 'Completed']),
-			'manufacturing_date' => Carbon::parse($this->faker->date),
-			'expiration_date' => Carbon::parse($this->faker->date)->addYears(rand(2, 4)),
+			'manufacturing_date' => $random_date,
+            'expiration_date' => (clone $random_date)->addYears(rand(2, 4)),
 		];
 	}
 }
