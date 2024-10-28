@@ -20,7 +20,7 @@ class ProductControllerTest extends TestCase
 
         $response = $this->getJson('/api/products');
         $response->assertStatus(200)
-                 ->assertJsonCount(5);
+                 ->assertJsonCount(5, 'items');
     }
 
     /**
@@ -56,7 +56,7 @@ class ProductControllerTest extends TestCase
          $response = $this->postJson('/api/products', $data);
 
         $response->assertStatus(201)
-                 ->assertJsonFragment(['message' => "The product has been created!\n\t\t"]); // Match the actual response structure
+                 ->assertJsonFragment(['message' => "The product has been created!"]); // Match the actual response structure
 
         $this->assertDatabaseHas('products', [
             'name' => $data['name'],
