@@ -21,19 +21,24 @@ class ProductUpdateRequest extends FormRequest
 	 * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
 	 */
 	public function rules(): array
-	{
-		return [
-			'name' => 'sometimes|string',
-			'category' => 'sometimes|string',
-			'active_ingredients' => 'sometimes|array',
-			'batch_number' => [
-				'sometimes',
-				'string',
-				Rule::unique('products')->ignore($this->product),
-			],
-			'research_status' => 'sometimes|string',
-			'manufacturing_date' => 'sometimes|date',
-			'expiration_date' => 'sometimes|date|after:manufacturing_date',
-		];
-	}
+{
+    return [
+        'name' => [
+            'required', // Make this required
+            'string',
+            Rule::unique('products')->ignore($this->product->id), // Use the product's ID to ignore itself
+        ],
+        'category' => 'required|string', // Assuming category is required
+        'active_ingredients' => 'required|array', // Assuming this field should also be required
+        'batch_number' => [
+            'required', // Make this required
+            'string',
+            Rule::unique('products')->ignore($this->product->id), // Use the product's ID to ignore itself
+        ],
+        'research_status' => 'required|string', // Assuming research status is required
+        'manufacturing_date' => 'required|date', // Assuming this field should be required
+        'expiration_date' => 'required|date|after:manufacturing_date', // Keep the existing logic
+    ];
+}
+
 }

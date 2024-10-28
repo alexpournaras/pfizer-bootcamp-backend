@@ -44,20 +44,41 @@ class ProductController extends Controller
 	 * Store a newly created resource in storage.
 	 */
 	public function store(ProductStoreRequest $request)
-	{
-		$product = Product::create($request->only(
-			'name',
-			'category',
-			'active_ingredients',
-			'batch_number',
-			'research_status',
-			'manufacturing_date',
-			'expiration_date',
-		));
+{
+	 // The request is already validated by ProductStoreRequest
 
-		return response()->json(['id' => $product->id, 'message' => 'The product has been created!'], 201);
-	}
+    // Check if manufacturing date is earlier than expiration date
+    $manufacturingDate = \Carbon\Carbon::parse($request->manufacturing_date);
+    $expirationDate = \Carbon\Carbon::parse($request->expiration_date);
 
+    if ($manufacturingDate->greaterThanOrEqualTo($expirationDate)) {
+        return response()->json(['message' => 'The expiration date must be after the manufacturing date.'], 422);
+    }
+    // The request is already validated by ProductStoreRequest
+
+    // Attempt to create the product
+    try {
+        $product = Product::create($request->only(
+            'name',
+            'category',
+            'active_ingredients',
+            'batch_number',
+            'research_status',
+            'manufacturing_date',
+            'expiration_date',
+        ));
+
+        return response()->json(['id' => $product->id, 'message' => 'The product has been created!'], 201);
+    } catch (\Illuminate\Database\QueryException $e) {
+        // Handle duplicate entry error
+        if ($e->errorInfo[1] == 1062) { // Error code for duplicate entry
+            return response()->json(['message' => 'Product name or Batch number already exists.'], 422);
+        }
+
+        // Handle other database exceptions
+        return response()->json(['message' => 'Could not create product.'], 500);
+    }
+}
 	/**
 	 * Display the specified resource.
 	 */
